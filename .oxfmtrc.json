@@ -1,0 +1,4 @@
+{
+  "ignorePatterns": ["**/public/**", "target/**", "pnpm-lock.yaml"],
+  "embeddedLanguageFormatting": "auto"
+}

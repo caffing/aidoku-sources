@@ -1,0 +1,36 @@
+[workspace]
+resolver = "3"
+members = ["sources/fr.mangamoins"]
+
+[workspace.package]
+authors = ["caffing"]
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+homepage = "https://github.com/caffing/aidoku-sources"
+repository = "https://github.com/caffing/aidoku-sources"
+keywords = ["aidoku", "manga"]
+categories = ["multimedia", "no-std", "parsing", "wasm"]
+
+[workspace.dependencies]
+aidoku = { git = "https://github.com/Aidoku/aidoku-rs.git" }
+aidoku-test = { git = "https://github.com/Aidoku/aidoku-rs.git" }
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+strip = true
+lto = true
+
+[workspace.lints.clippy]
+missing_errors_doc = "allow"
+correctness = { level = "deny", priority = -1 }
+suspicious = { level = "deny", priority = -1 }
+style = { level = "deny", priority = -1 }
+complexity = { level = "deny", priority = -1 }
+perf = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }

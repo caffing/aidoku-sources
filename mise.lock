@@ -1,0 +1,11 @@
+[[tools.aidoku-cli]]
+version = "HEAD"
+backend = "cargo:https://github.com/Aidoku/aidoku-rs"
+
+[[tools.aidoku-test-runner]]
+version = "HEAD"
+backend = "cargo:https://github.com/Aidoku/aidoku-rs"
+
+[[tools."npm:oxfmt"]]
+version = "0.20.0"
+backend = "npm:oxfmt"

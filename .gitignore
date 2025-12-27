@@ -1,0 +1,4 @@
+/target
+public/
+*.aix
+node_modules/
