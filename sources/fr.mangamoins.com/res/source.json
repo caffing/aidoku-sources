@@ -1,0 +1,12 @@
+{
+	"info": {
+		"id": "fr.mangamoins",
+		"name": "MANGA Moins",
+		"version": 1,
+		"url": "https://mangamoins.com/",
+		"contentRating": 0,
+		"languages": [
+			"fr"
+		]
+	}
+}

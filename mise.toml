@@ -1,0 +1,7 @@
+[alias]
+aidoku = "cargo:https://github.com/Aidoku/aidoku-rs"
+aidoku-test-runner = "cargo:https://github.com/Aidoku/aidoku-rs"
+
+[tools]
+"aidoku" = { version = "latest", crate = "aidoku-cli", locked = true }
+"aidoku-test-runner" = { version = "latest", crate = "aidoku-test-runner", locked = true }
