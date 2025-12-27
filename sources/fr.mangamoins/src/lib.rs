@@ -10,10 +10,11 @@ use aidoku::{
     },
     register_source,
 };
+use helper::USER_AGENT;
 
-use crate::helper::get_all_releases;
+use crate::parse::get_all_releases;
 
-pub mod helper;
+pub mod parse;
 
 const BASE_URL: &str = "https://mangamoins.com";
 
@@ -32,12 +33,11 @@ impl Source for MangaMoins {
     ) -> Result<MangaPageResult> {
         let url = format!("{BASE_URL}/?p={page}");
         let body = match &query {
-            Some(q) => Request::get(format!("{url}&q={}", encode_uri(q.to_lowercase())))?.header(
-                "User-Agent",
-                "Mozilla/5.0 (X11; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0",
-            ),
+            Some(q) => Request::get(format!("{url}&q={}", encode_uri(q.to_lowercase())))?,
             None => Request::get(url)?,
         }
+        .header("Referer", BASE_URL)
+        .header("User-Agent", USER_AGENT)
         .string()?;
 
         let results = get_all_releases(&body, page)?;
@@ -55,6 +55,8 @@ impl Source for MangaMoins {
             "{BASE_URL}/?q={}",
             encode_uri(manga.key.clone()).to_lowercase()
         ))?
+        .header("Referer", BASE_URL)
+        .header("User-Agent", USER_AGENT)
         .string()?;
 
         let results = get_all_releases(&body, 1)?;
@@ -71,6 +73,8 @@ impl Source for MangaMoins {
             Some(url) => Request::get(url),
             None => Request::get(format!("{BASE_URL}/?scan={}", chapter.key)),
         }?
+        .header("Referer", BASE_URL)
+        .header("User-Agent", USER_AGENT)
         .string()?;
 
         let document = Html::parse(&body)?;
@@ -118,27 +122,27 @@ impl DeepLinkHandler for MangaMoins {
 
 register_source!(MangaMoins, ListingProvider, Home, DeepLinkHandler);
 
-// #[cfg(test)]
-// mod tests {
+#[cfg(test)]
+mod tests {
+    use aidoku_test::aidoku_test;
 
-//     use aidoku::alloc::string::ToString;
-//     use aidoku_test::aidoku_test;
+    use super::*;
 
-//     use super::*;
+    #[aidoku_test]
+    fn test_get_all() {
+        let manga_moins = MangaMoins::new();
 
-//     #[aidoku_test]
-//     fn test_get_all() {
-//         let a = MangaMoins::new();
+        let mangas = manga_moins
+            .get_search_manga_list(None, 1, std::vec![])
+            .unwrap();
 
-//         let f = a
-//             .get_search_manga_list(Some("One Piece".to_string()), 1, std::vec![])
-//             .unwrap();
+        assert!(mangas.entries.len() > 0);
+        assert!(mangas.entries[0].chapters.clone().unwrap().len() > 0);
+        let chapers = mangas.entries[0].chapters.clone().unwrap();
+        let pages: Vec<Page> = manga_moins
+            .get_page_list(mangas.clone().entries[0].clone(), chapers[0].clone())
+            .unwrap();
 
-//         let chapers = f.clone().entries[0].clone().chapters.unwrap()[0].clone();
-//         let f = a
-//             .get_page_list(f.clone().entries[0].clone(), chapers)
-//             .unwrap();
-
-//         panic!("{:?}", f);
-//     }
-// }
+        assert!(pages.len() > 0)
+    }
+}

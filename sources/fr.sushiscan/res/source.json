@@ -1,0 +1,10 @@
+{
+  "info": {
+    "id": "fr.sushiscan",
+    "name": "Sushiscan",
+    "version": 3,
+    "url": "https://sushiscan.net",
+    "contentRating": 0,
+    "languages": ["fr"]
+  }
+}

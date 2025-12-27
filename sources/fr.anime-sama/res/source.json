@@ -1,0 +1,14 @@
+{
+  "info": {
+    "id": "fr.anime-sama",
+    "name": "Anime-Sama",
+    "version": 1,
+    "urls": ["https://anime-sama.tv", "https://anime-sama.to", "https://anime-sama.org"],
+    "url": "https://anime-sama.si",
+    "contentRating": 0,
+    "languages": ["fr"]
+  },
+  "config": {
+    "allowsBaseUrlSelect": true
+  }
+}

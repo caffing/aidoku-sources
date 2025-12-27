@@ -5,7 +5,7 @@ version = 4
 [[package]]
 name = "aidoku"
 version = "0.3.0"
-source = "git+https://github.com/Aidoku/aidoku-rs.git#8ad3c987875179314cfc724f69bc674a44251e7e"
+source = "git+https://github.com/Aidoku/aidoku-rs.git#c5a7e53d0c586a06056c76854017ccb220328193"
 dependencies = [
  "euclid",
  "hashbrown",
@@ -21,7 +21,7 @@ dependencies = [
 [[package]]
 name = "aidoku-test"
 version = "1.0.0"
-source = "git+https://github.com/Aidoku/aidoku-rs.git#8ad3c987875179314cfc724f69bc674a44251e7e"
+source = "git+https://github.com/Aidoku/aidoku-rs.git#c5a7e53d0c586a06056c76854017ccb220328193"
 dependencies = [
  "quote",
  "syn",
@@ -32,6 +32,15 @@ name = "allocator-api2"
 version = "0.2.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
+
+[[package]]
+name = "animesama"
+version = "0.0.1"
+dependencies = [
+ "aidoku",
+ "aidoku-test",
+ "helper",
+]
 
 [[package]]
 name = "atomic-polyfill"
@@ -139,10 +148,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "helper"
+version = "0.1.0"
+dependencies = [
+ "aidoku",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "92ecc6618181def0457392ccd0ee51198e065e016d1d527a7ac1b6dc7c1f09d2"
+
+[[package]]
+name = "lelscanfr"
+version = "0.0.1"
+dependencies = [
+ "aidoku",
+ "aidoku-test",
+ "helper",
+]
 
 [[package]]
 name = "libm"
@@ -165,6 +190,7 @@ version = "0.0.1"
 dependencies = [
  "aidoku",
  "aidoku-test",
+ "helper",
 ]
 
 [[package]]
@@ -198,9 +224,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.103"
+version = "1.0.104"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ee95bc4ef87b8d5ba32e8b7714ccc834865276eab0aed5c9958d00ec45f49e8"
+checksum = "9695f8df41bb4f3d222c95a67532365f569318332d03d5f3f67f37b20e6ebdf0"
 dependencies = [
  "unicode-ident",
 ]
@@ -281,10 +307,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 
 [[package]]
+name = "sushiscan"
+version = "0.0.1"
+dependencies = [
+ "aidoku",
+ "aidoku-test",
+ "helper",
+]
+
+[[package]]
 name = "syn"
-version = "2.0.111"
+version = "2.0.112"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "390cc9a294ab71bdb1aa2e99d13be9c753cd2d7bd6560c77118597410c4d2e87"
+checksum = "21f182278bf2d2bcb3c88b1b08a37df029d71ce3d3ae26168e3c653b213b99d4"
 dependencies = [
  "proc-macro2",
  "quote",

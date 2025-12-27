@@ -1,7 +1,7 @@
 [package]
-name = "mangamoins"
+name = "lelscanfr"
 version = "0.0.1"
-description = "source for mangamoins"
+description = "source for lelscanfr"
 keywords.workspace = true
 categories.workspace = true
 license.workspace = true

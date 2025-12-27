@@ -30,12 +30,12 @@ fn extract_chapter(els: &Element) -> Chapter {
         );
 
     let chapter_title = els
-        .select_first("div.sortiefooter > p")
+        .select_first(".sortiefooter > p")
         .and_then(|t| t.own_text())
         .unwrap_or_default();
 
     let chapter_number: Option<f32> = els
-        .select_first("div.sortiefooter > h3")
+        .select_first(".sortiefooter > h3")
         .and_then(|h3| h3.text())
         .and_then(|text| {
             text.trim()
@@ -44,7 +44,7 @@ fn extract_chapter(els: &Element) -> Chapter {
         });
 
     let chapter_language: Option<String> = els
-        .select_first("div.sortiefooter > h4")
+        .select_first(".sortiefooter > h4")
         .and_then(|h4| h4.text())
         .map(|text| text.trim().to_lowercase());
 
@@ -68,7 +68,7 @@ pub fn get_all_releases(response: &str, current_page: i32) -> Result<MangaPageRe
     let mut manga_map: HashMap<String, Manga> = HashMap::new();
 
     let sorties = document
-        .select("div.LastSorties div.sortie")
+        .select(".LastSorties .sortie")
         .ok_or(HtmlError::NoResult)?;
 
     for els in sorties {
@@ -110,7 +110,7 @@ pub fn get_all_releases(response: &str, current_page: i32) -> Result<MangaPageRe
     }
 
     let last_page: Option<i32> = document
-        .select("div.bottom_pages div.pages a")
+        .select(".bottom_pages .pages a")
         .iter()
         .next()
         .and_then(ElementList::text)

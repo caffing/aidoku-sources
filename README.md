@@ -6,10 +6,12 @@ This repository hosts some manga sources that are installable directly through t
 
 [Add this source list](https://aidoku.app/add-source-list/?url=https://caffing.github.io/aidoku-sources/) to the Aidoku app.
 
-Add this line to your rakuyomi `"source_lists"` `"https://caffing.github.io/aidoku-sources/index.min.json"`
+For rakuyomi add this source in the `"source_lists"` array in your `settings.json` `"https://caffing.github.io/aidoku-sources/index.min.json"`
 
 ## Sources Available
 
 |    Name     |            URL            |
 | :---------: | :-----------------------: |
 | Manga Moins | <https://mangamoins.com/> |
+| Anime-sama  | <https://anime-sama.si/>  |
+|  Lelscanfr  | <https://lelscanfr.com/>  |

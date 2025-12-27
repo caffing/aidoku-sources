@@ -1,6 +1,12 @@
 [workspace]
 resolver = "3"
-members = ["sources/fr.mangamoins"]
+members = [
+  "crates/helper",
+  "sources/fr.anime-sama",
+  "sources/fr.lelscanfr",
+  "sources/fr.mangamoins",
+  "sources/fr.sushiscan",
+]
 
 [workspace.package]
 authors = ["caffing"]
@@ -15,6 +21,7 @@ categories = ["multimedia", "no-std", "parsing", "wasm"]
 [workspace.dependencies]
 aidoku = { git = "https://github.com/Aidoku/aidoku-rs.git" }
 aidoku-test = { git = "https://github.com/Aidoku/aidoku-rs.git" }
+helper = { path = "./crates/helper" }
 
 [profile.dev]
 panic = "abort"
