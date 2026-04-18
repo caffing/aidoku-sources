@@ -1,4 +1,4 @@
-[alias]
+[tool_alias]
 aidoku-cli = "cargo:https://github.com/Aidoku/aidoku-rs"
 aidoku-test-runner = "cargo:https://github.com/Aidoku/aidoku-rs"
 

@@ -13,8 +13,10 @@ keywords = ["aidoku", "manga"]
 categories = ["multimedia", "no-std", "parsing", "wasm"]
 
 [workspace.dependencies]
-aidoku = { git = "https://github.com/Aidoku/aidoku-rs.git" }
+aidoku = { git = "https://github.com/Aidoku/aidoku-rs.git", features = ["json"] }
 aidoku-test = { git = "https://github.com/Aidoku/aidoku-rs.git" }
+serde = { version = "1.0.228", default-features = false, features = ["derive", "alloc"] }
+serde_json = { version = "1.0.148", default-features = false, features = ["alloc"] }
 
 [profile.dev]
 panic = "abort"

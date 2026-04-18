@@ -100,3 +100,5 @@ jobs:
 
       - name: Spell check code
         uses: crate-ci/typos@2d0ce569feab1f8752f1dde43cc2f2aa53236e06
+        with:
+          config: .github/typos.toml

@@ -4,18 +4,17 @@ use aidoku::{
     ListingProvider, Manga, MangaPageResult, Page, PageContent, Result, Source,
     alloc::{String, Vec, format},
     helpers::uri::encode_uri,
-    imports::{
-        html::{Html, HtmlError},
-        net::Request,
-    },
+    imports::net::Request,
     register_source,
 };
 
-use crate::helper::get_all_releases;
+use crate::parse::{ChapterContent, get_all_releases, search, search_manga};
 
-pub mod helper;
+pub mod parse;
 
 const BASE_URL: &str = "https://mangamoins.com";
+pub const USER_AGENT: &str =
+    "Mozilla/5.0 (X11; Linux x86_64; rv:149.0) Gecko/20100101 Firefox/149.0";
 
 struct MangaMoins;
 
@@ -27,20 +26,27 @@ impl Source for MangaMoins {
     fn get_search_manga_list(
         &self,
         query: Option<String>,
-        page: i32,
+        _page: i32,
         _filters: Vec<FilterValue>,
     ) -> Result<MangaPageResult> {
-        let url = format!("{BASE_URL}/?p={page}");
-        let body = match &query {
-            Some(q) => Request::get(format!("{url}&q={}", encode_uri(q.to_lowercase())))?.header(
-                "User-Agent",
-                "Mozilla/5.0 (X11; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0",
-            ),
-            None => Request::get(url)?,
-        }
-        .string()?;
+        let url = format!("{BASE_URL}/api/v1/mangas");
 
-        let results = get_all_releases(&body, page)?;
+        let results = if let Some(q) = &query {
+            let body = Request::get(format!(
+                "{BASE_URL}/api/v1/explore?q={}&page=1&limit=20",
+                encode_uri(q.to_lowercase())
+            ))?
+            .header("Referer", BASE_URL)
+            .header("User-Agent", USER_AGENT)
+            .string()?;
+            search(&body)?
+        } else {
+            let body = Request::get(url)?
+                .header("Referer", BASE_URL)
+                .header("User-Agent", USER_AGENT)
+                .string()?;
+            get_all_releases(&body)?
+        };
 
         Ok(results)
     }
@@ -51,45 +57,31 @@ impl Source for MangaMoins {
         _needs_details: bool,
         _needs_chapters: bool,
     ) -> Result<Manga> {
-        let body = Request::get(format!(
-            "{BASE_URL}/?q={}",
-            encode_uri(manga.key.clone()).to_lowercase()
-        ))?
-        .string()?;
+        let url = format!("{BASE_URL}/api/v1/explore?q={}&page=1&limit=20", manga.key);
+        let response = Request::get(&url)?
+            .header("Referer", BASE_URL)
+            .header("User-Agent", USER_AGENT)
+            .string()?;
 
-        let results = get_all_releases(&body, 1)?;
-        for result in &results.entries {
-            if result.key == manga.key {
-                return Ok(result.clone());
-            }
-        }
-        Ok(manga)
+        search_manga(&response)
     }
 
     fn get_page_list(&self, _manga: Manga, chapter: Chapter) -> Result<Vec<Page>> {
-        let body = match chapter.url {
-            Some(url) => Request::get(url),
-            None => Request::get(format!("{BASE_URL}/?scan={}", chapter.key)),
-        }?
-        .string()?;
+        let response = Request::get(format!("{BASE_URL}/api/v1/scan?slug={}", chapter.key))?
+            .header("Referer", BASE_URL)
+            .header("User-Agent", USER_AGENT)
+            .string()?;
 
-        let document = Html::parse(&body)?;
+        let parsed: ChapterContent = serde_json::from_str(&response)?;
 
         let mut pages = Vec::new();
 
-        let elements = document
-            .select("link[rel='preload'][as='image']")
-            .ok_or(HtmlError::NoResult)?;
-
-        for els in elements {
-            let href = els.attr("href").ok_or(HtmlError::NoResult)?;
-            let url = href
-                .strip_prefix("./")
-                .map(|s| format!("{BASE_URL}/{s}"))
-                .ok_or(HtmlError::NoResult)?;
-
+        for i in 1..parsed.page_numbers {
             pages.push(Page {
-                content: PageContent::url(url),
+                content: PageContent::url(format!(
+                    "{}/{i:02}.webp",
+                    parsed.pages_base_url.trim_end_matches('/')
+                )),
                 ..Default::default()
             });
         }
@@ -118,27 +110,31 @@ impl DeepLinkHandler for MangaMoins {
 
 register_source!(MangaMoins, ListingProvider, Home, DeepLinkHandler);
 
-// #[cfg(test)]
-// mod tests {
+#[cfg(test)]
+mod tests {
 
-//     use aidoku::alloc::string::ToString;
-//     use aidoku_test::aidoku_test;
+    use aidoku_test::aidoku_test;
 
-//     use super::*;
+    use super::*;
 
-//     #[aidoku_test]
-//     fn test_get_all() {
-//         let a = MangaMoins::new();
+    #[aidoku_test]
+    fn test_get_all() {
+        let a = MangaMoins::new();
 
-//         let f = a
-//             .get_search_manga_list(Some("One Piece".to_string()), 1, std::vec![])
-//             .unwrap();
+        let f = a.get_search_manga_list(None, 1, std::vec![]).unwrap();
 
-//         let chapers = f.clone().entries[0].clone().chapters.unwrap()[0].clone();
-//         let f = a
-//             .get_page_list(f.clone().entries[0].clone(), chapers)
-//             .unwrap();
+        let page_update = a
+            .get_manga_update(f.clone().entries[0].clone(), false, false)
+            .unwrap();
 
-//         panic!("{:?}", f);
-//     }
-// }
+        assert!(page_update.chapters.is_some());
+
+        let chapers = f.clone().entries[0].clone().chapters.unwrap()[0].clone();
+
+        let f = a
+            .get_page_list(f.clone().entries[0].clone(), chapers)
+            .unwrap();
+
+        assert!(f.len() > 0);
+    }
+}
