@@ -5,7 +5,7 @@ version = 4
 [[package]]
 name = "aidoku"
 version = "0.3.0"
-source = "git+https://github.com/Aidoku/aidoku-rs.git#401296e54610f938beac4102b564ae11db4b3aed"
+source = "git+https://github.com/Aidoku/aidoku-rs.git#cf44ccbc5cf0becbc4acb71c5e0715ad37e892c7"
 dependencies = [
  "euclid",
  "hashbrown",
@@ -22,7 +22,7 @@ dependencies = [
 [[package]]
 name = "aidoku-test"
 version = "1.0.0"
-source = "git+https://github.com/Aidoku/aidoku-rs.git#401296e54610f938beac4102b564ae11db4b3aed"
+source = "git+https://github.com/Aidoku/aidoku-rs.git#cf44ccbc5cf0becbc4acb71c5e0715ad37e892c7"
 dependencies = [
  "quote",
  "syn",
