@@ -53,7 +53,7 @@ jobs:
           components: rustfmt
 
       - name: Install pnpm
-        uses: pnpm/action-setup@903f9c1a6ebcba6cf41d87230be49611ac97822e # v6.0.3
+        uses: pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d # v6.0.5
         with:
           run_install: false
 
@@ -99,6 +99,6 @@ jobs:
           persist-credentials: false
 
       - name: Spell check code
-        uses: crate-ci/typos@cf5f1c29a8ac336af8568821ec41919923b05a83
+        uses: crate-ci/typos@bbaefadf97b0ec5fdc942684b647f1a6ab250274
         with:
           config: .github/typos.toml
